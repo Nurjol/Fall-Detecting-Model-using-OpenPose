@@ -4,26 +4,42 @@
 
 Although, the FPS real-time depends on your processor and GPU. You can always consider changing configuration options through tensorflow commands.
 
-**You can even run this on your macbook with a descent FPS!**
 
 Original Repo(Caffe) : https://github.com/CMU-Perceptual-Computing-Lab/openpose
 
-Also, Courtesy : https://github.com/ildoonet/tf-pose-estimation
+## Fall Detection 
+  3 step check process
+  First step: Head position
+  
+     We compare the head position to head position of the previous frame: 
+  
+  ![image](https://user-images.githubusercontent.com/65017142/223717726-f332de36-cd7e-4da5-a338-32f05af8b7d9.png)
+  
+  Second step: Bounding box H/W ratio
+      As we know if Bounding Box H/W ratio is bigger than 1 it means person is in standing position. 
+       So if it is smaller than 1, we change the state as fallen and go to next step 
+       
+       Bounding box example: 
+       
+       Standing:
+       
+       ![image](https://user-images.githubusercontent.com/65017142/223718644-e626f472-13c8-4b67-9e06-0bda9621bdb0.png)
 
-| CMU's Original Model</br> on Macbook Pro 15" | Mobilenet-thin </br>on Macbook Pro 15" | Mobilenet-thin</br>on Jetson TX2 |
-|:---------|:--------------------|:----------------|
-| ![cmu-model](/etcs/openpose_macbook_cmu.gif)     | ![mb-model-macbook](/etcs/openpose_macbook_mobilenet3.gif) | ![mb-model-tx2](/etcs/openpose_tx2_mobilenet3.gif) |
-| **~0.6 FPS** | **~4.2 FPS** @ 368x368 | **~10 FPS** @ 368x368 |
-| 2.8GHz Quad-core i7 | 2.8GHz Quad-core i7 | Jetson TX2 Embedded Board | 
+       Fallen:
+       
+       ![image](https://user-images.githubusercontent.com/65017142/223718700-74efca1c-737b-445a-b59c-9045c7499b0f.png)
+  Third step: Check after
+      We check if the fallen person gets up in next 15 frames. If not we make assumption that person has fallen. 
+      
+      Fallen person example:
+      
+      ![image](https://user-images.githubusercontent.com/65017142/223719150-c713d275-bdcb-4fb4-a339-fc8323bf22c1.png)
 
-Implemented features are listed here : [features](./etcs/feature.md)
+      Person get up example:
+      
+      ![image](https://user-images.githubusercontent.com/65017142/223719222-5ffbab38-35d1-441b-9aeb-e8d1a23447ce.png)
 
-## Important Updates
-
-- 2019.3.12 Add new models using mobilenet-v2 architecture. See : [experiments.md](./etcs/experiments.md)
-- 2018.5.21 Post-processing part is implemented in c++. It is required compiling the part. See: https://github.com/ildoonet/tf-pose-estimation/tree/master/src/pafprocess
-- 2018.2.7 Arguments in run.py script changed. Support dynamic input size.
-
+  
 ## Install
 
 ### Dependencies
